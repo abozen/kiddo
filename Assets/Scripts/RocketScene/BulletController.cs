@@ -28,11 +28,11 @@ public class BulletController : MonoBehaviour
             Destroy(other.gameObject);
             
             // Add score if GameManager exists
-            GameManager gameManager = FindObjectOfType<GameManager>();
-            if (gameManager != null)
-            {
-                gameManager.AddScore(10);
-            }
+            // GameManager gameManager = FindObjectOfType<GameManager>();
+            // if (gameManager != null)
+            // {
+            //     gameManager.AddScore(10);
+            // }
             
             // Create hit effect if available
             if (hitEffectPrefab != null)

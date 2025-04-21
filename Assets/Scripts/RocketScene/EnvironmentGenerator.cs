@@ -37,7 +37,7 @@ public class EnvironmentGenerator : MonoBehaviour
         GameObject envPrefab = environmentPrefabs[Random.Range(0, environmentPrefabs.Length)];
         
         // Create new environment
-        Vector3 spawnPos = new Vector3(0f, 0f, zPosition);
+        Vector3 spawnPos = new Vector3(-200f, 400f, zPosition);
         GameObject newEnv = Instantiate(envPrefab, spawnPos, Quaternion.identity);
         activeEnvironments.Add(newEnv);
         

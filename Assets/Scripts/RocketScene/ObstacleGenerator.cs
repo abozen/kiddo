@@ -17,6 +17,8 @@ public class ObstacleGenerator : MonoBehaviour
     [Header("Collectible Settings")]
     [SerializeField] private GameObject collectiblePrefab;
     [SerializeField] private float collectibleSpawnChance = 0.3f;
+    [SerializeField] private GameObject bulletCollectiblePrefab;
+    [SerializeField] private float bulletCollectibleSpawnChance = 0.2f;
     
     [Header("Generation Settings")]
     [SerializeField] private float spawnDistance = 100f;
@@ -44,10 +46,15 @@ public class ObstacleGenerator : MonoBehaviour
         {
             SpawnObstacle();
             
-            // Try to spawn collectible
+            // Try to spawn collectibles
             if (Random.value < collectibleSpawnChance)
             {
                 SpawnCollectible();
+            }
+            
+            if (Random.value < bulletCollectibleSpawnChance)
+            {
+                SpawnBulletCollectible();
             }
             
             // Calculate next spawn time with difficulty
@@ -88,10 +95,10 @@ public class ObstacleGenerator : MonoBehaviour
         // Randomize X position
         Vector3 position = basePosition;
         position.x = Random.Range(-horizSpawnRange, horizSpawnRange);
-        position.y -= 10.5f;
+        position.y -= 12f;
         
         // Instantiate obstacle
-        GameObject obstacle = Instantiate(obstaclePrefab, position, Quaternion.identity);
+        GameObject obstacle = Instantiate(obstaclePrefab, position, Quaternion.Euler(0, 180, 0));
         activeObstacles.Add(obstacle);
     }
     
@@ -125,6 +132,21 @@ public class ObstacleGenerator : MonoBehaviour
         
         // Instantiate collectible
         Instantiate(collectiblePrefab, spawnPos, Quaternion.identity);
+    }
+    
+    private void SpawnBulletCollectible()
+    {
+        if (bulletCollectiblePrefab == null) return;
+        
+        // Determine spawn position ahead of player
+        Vector3 spawnPos = player.position + player.forward * spawnDistance;
+        
+        // Randomize X position
+        spawnPos.x = Random.Range(-horizSpawnRange, horizSpawnRange);
+        spawnPos.y = .5f; // Adjust this based on your game's needs
+        
+        // Instantiate bullet collectible
+        Instantiate(bulletCollectiblePrefab, spawnPos, Quaternion.identity);
     }
     
     private void CleanupObstacles()

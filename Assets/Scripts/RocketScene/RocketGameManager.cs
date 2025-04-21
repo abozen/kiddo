@@ -1,18 +1,23 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI gemsText;
     [SerializeField] private TextMeshProUGUI highScoreText;
-    [SerializeField] private TextMeshProUGUI finalScoreText;
+    [SerializeField] private TextMeshProUGUI finalGemsText;
     [SerializeField] private TextMeshProUGUI distanceText;
     [SerializeField] private Transform player;
+    [SerializeField] private Image[] bulletImages; // UI'daki bullet görselleri
+    [SerializeField] private Color bulletActiveColor = Color.white;
+    [SerializeField] private Color bulletInactiveColor = new Color(1, 1, 1, 0.3f);
     
     private bool gameOver = false;
-    private int score = 0;
+    private int gems = 0;
+    private int bulletCount = 3; // Başlangıç bullet sayısı
     private float initialPlayerZ;
     private float distanceTraveled;
     
@@ -22,7 +27,8 @@ public class GameManager : MonoBehaviour
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
             
-        score = 0;
+        gems = 0;
+        bulletCount = 3;
         gameOver = false;
         
         // Save initial player position
@@ -30,8 +36,9 @@ public class GameManager : MonoBehaviour
             initialPlayerZ = player.position.z;
             
         // Update UI
-        UpdateScoreUI();
+        UpdateGemsUI();
         UpdateHighScoreUI();
+        UpdateBulletUI();
     }
     
     private void Update()
@@ -49,19 +56,38 @@ public class GameManager : MonoBehaviour
             {
                 distanceText.text = $"Distance: {distanceTraveled:0}m";
             }
-            
-            // Add score based on distance (every 50 meters)
-            if (distanceTraveled > 0 && distanceTraveled % 50 < 0.1f)
-            {
-                AddScore(5);
-            }
         }
     }
     
-    public void AddScore(int points)
+    public void AddGem()
     {
-        score += points;
-        UpdateScoreUI();
+        gems++;
+        UpdateGemsUI();
+    }
+    
+    public void AddBullet()
+    {
+        if (bulletCount < 3)
+        {
+            bulletCount++;
+            UpdateBulletUI();
+        }
+    }
+    
+    public bool UseBullet()
+    {
+        if (bulletCount > 0)
+        {
+            bulletCount--;
+            UpdateBulletUI();
+            return true;
+        }
+        return false;
+    }
+    
+    public int GetBulletCount()
+    {
+        return bulletCount;
     }
     
     public bool IsGameOver()
@@ -81,21 +107,26 @@ public class GameManager : MonoBehaviour
         {
             gameOverPanel.SetActive(true);
             
-            // Update final score display
-            if (finalScoreText != null)
+            // Update final gems display
+            if (finalGemsText != null)
             {
-                finalScoreText.text = $"Final Score: {score}";
+                finalGemsText.text = $"Gems Collected: {gems}";
             }
         }
         
         // Update high score if needed
         int highScore = PlayerPrefs.GetInt("HighScore", 0);
-        if (score > highScore)
+        if (gems > highScore)
         {
-            PlayerPrefs.SetInt("HighScore", score);
-            PlayerPrefs.Save();
-            UpdateHighScoreUI();
+            PlayerPrefs.SetInt("HighScore", gems);
         }
+        
+        // Update total gems
+        int currentTotalGems = PlayerPrefs.GetInt("TotalGems", 0);
+        PlayerPrefs.SetInt("TotalGems", currentTotalGems + gems);
+        PlayerPrefs.Save();
+        
+        UpdateHighScoreUI();
     }
     
     public void RestartGame()
@@ -103,11 +134,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     
-    private void UpdateScoreUI()
+    private void UpdateGemsUI()
     {
-        if (scoreText != null)
+        if (gemsText != null)
         {
-            scoreText.text = $"Score: {score}";
+            gemsText.text = $"Gems: {gems}";
         }
     }
     
@@ -117,6 +148,20 @@ public class GameManager : MonoBehaviour
         {
             int highScore = PlayerPrefs.GetInt("HighScore", 0);
             highScoreText.text = $"High Score: {highScore}";
+        }
+    }
+    
+    private void UpdateBulletUI()
+    {
+        if (bulletImages != null)
+        {
+            for (int i = 0; i < bulletImages.Length; i++)
+            {
+                if (bulletImages[i] != null)
+                {
+                    bulletImages[i].color = i < bulletCount ? bulletActiveColor : bulletInactiveColor;
+                }
+            }
         }
     }
 }

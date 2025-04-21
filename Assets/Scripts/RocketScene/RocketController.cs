@@ -103,7 +103,7 @@ public class RocketController : MonoBehaviour
             
         // Create bullet
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
-        
+        gameManager.UseBullet();
         // Reset cooldown
         shootTimer = shootCooldown;
     }

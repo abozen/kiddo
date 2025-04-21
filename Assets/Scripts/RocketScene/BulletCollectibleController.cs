@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CollectibleController : MonoBehaviour
+public class BulletCollectibleController : MonoBehaviour
 {
     [SerializeField] private GameObject collectEffectPrefab;
     
@@ -8,11 +8,11 @@ public class CollectibleController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // Add gem
+            // Add bullet
             GameManager gameManager = FindObjectOfType<GameManager>();
             if (gameManager != null)
             {
-                gameManager.AddGem();
+                gameManager.AddBullet();
             }
             
             // Spawn collect effect
