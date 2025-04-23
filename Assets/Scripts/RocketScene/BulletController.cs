@@ -5,6 +5,8 @@ public class BulletController : MonoBehaviour
     [SerializeField] private float speed = 30f;
     [SerializeField] private float lifetime = 3f;
     [SerializeField] private GameObject hitEffectPrefab;
+    [SerializeField] private GameObject obstaclePopPrefab;
+
     
     private Rigidbody rb;
     
@@ -38,6 +40,10 @@ public class BulletController : MonoBehaviour
             if (hitEffectPrefab != null)
             {
                 Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+            }
+            if (obstaclePopPrefab != null)
+            {
+                Instantiate(obstaclePopPrefab, transform.position, Quaternion.identity);
             }
             
             // Destroy self

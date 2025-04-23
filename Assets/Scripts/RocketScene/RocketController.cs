@@ -22,6 +22,8 @@ public class RocketController : MonoBehaviour
     
     [Header("Game Control")]
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameObject CollisonEffectPrefab;
+
     
     private float shootTimer;
     private Rigidbody rb;
@@ -112,6 +114,10 @@ public class RocketController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Obstacle"))
         {
+            if (CollisonEffectPrefab != null)
+            {
+                Instantiate(CollisonEffectPrefab, bulletSpawnPoint.position, Quaternion.identity);
+            }
             // Game over when colliding with obstacles
             gameManager.GameOver();
             

@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 882b30a76641743d8b807317b9eed8e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collectEffectPrefab: {fileID: 0}
+  collectEffectPrefab: {fileID: 5081077754155646134, guid: cc164153f1d6045e4a8f746422b6ca23, type: 3}
 --- !u!65 &3845473988796623784
 BoxCollider:
   m_ObjectHideFlags: 0

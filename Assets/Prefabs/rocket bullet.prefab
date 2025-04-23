@@ -70,7 +70,10 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 823ac0e34852f1946b70b81aa0a7763c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 400000, guid: a4eca113b24018743af83abaf0e8cf94, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8073719345859232596}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: a4eca113b24018743af83abaf0e8cf94, type: 3}
       insertIndex: -1
@@ -128,7 +131,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 30
   lifetime: 3
-  hitEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 2495088029719183558, guid: cd95ced61e62e4d4f844642ca68c22a4, type: 3}
+  obstaclePopPrefab: {fileID: 9002402760014591137, guid: 94b1ca4b03d224f6cba0f0ff3ba7fb29, type: 3}
 --- !u!65 &5842027117663113124
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -150,3 +154,90 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.11999099, y: 0.34643516, z: 0.13377452}
   m_Center: {x: -0.015506903, y: 0.17321758, z: 0}
+--- !u!4 &2417296571648264092 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400000, guid: a4eca113b24018743af83abaf0e8cf94, type: 3}
+  m_PrefabInstance: {fileID: 2417296571648138524}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8982272209482815011
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2417296571648264092}
+    m_Modifications:
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4365375971907703751, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_Name
+      value: CFXR Fire Breath
+      objectReference: {fileID: 0}
+    - target: {fileID: 8502013178266730122, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+      propertyPath: m_Intensity
+      value: 2.7328112
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+--- !u!4 &8073719345859232596 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 913364360602424695, guid: fa745a537262c44e59299a83a56ebe3b, type: 3}
+  m_PrefabInstance: {fileID: 8982272209482815011}
+  m_PrefabAsset: {fileID: 0}
