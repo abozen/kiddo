@@ -89,10 +89,10 @@ public class SceneTransitionManager : MonoBehaviour
     
     public IEnumerator TransitionToScene(string sceneName)
     {
-        Debug.Log("" + sceneName);
+
         if (isTransitioning) yield break;
         isTransitioning = true;
-        Debug.Log("" + sceneName);
+
         
         // Activate and position clouds at screen edges
         foreach (Image cloud in clouds)
@@ -106,7 +106,7 @@ public class SceneTransitionManager : MonoBehaviour
             cloud.rectTransform.anchoredPosition = startPos;
             cloud.rectTransform.localScale = Vector3.one;
         }
-        Debug.Log("" + sceneName);
+
         
         // Animate clouds coming in
         for (int i = 0; i < clouds.Length; i++)
@@ -119,7 +119,7 @@ public class SceneTransitionManager : MonoBehaviour
         
         // Load new scene
         SceneManager.LoadScene(sceneName);
-        Debug.Log("" + sceneName);
+
         
         // Animate clouds going out
         foreach (Image cloud in clouds)
@@ -131,7 +131,7 @@ public class SceneTransitionManager : MonoBehaviour
             cloud.rectTransform.DOAnchorPos(endPos, transitionDuration)
                 .SetEase(Ease.InOutQuad);
         }
-        Debug.Log("td" + transitionDuration);
+
         // yield return new WaitForSecondsRealtime(transitionDuration);
         
         
