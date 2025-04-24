@@ -103,11 +103,15 @@ public class RocketController : MonoBehaviour
         if (gameManager.IsGameOver() || shootTimer > 0)
             return;
             
-        // Create bullet
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
-        gameManager.UseBullet();
-        // Reset cooldown
-        shootTimer = shootCooldown;
+        // Check if we have bullets
+        if (gameManager.GetBulletCount() > 0)
+        {
+            // Create bullet
+            GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+            gameManager.UseBullet();
+            // Reset cooldown
+            shootTimer = shootCooldown;
+        }
     }
     
     private void OnCollisionEnter(Collision collision)

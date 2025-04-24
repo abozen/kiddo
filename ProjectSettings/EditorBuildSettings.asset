@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/PolygonKids/Scenes/Demo.unity
-    guid: 08bfc54f2fa2681428e7e363b2d83c34
+    path: Assets/Scenes/ParkScene.unity
+    guid: 4b5f2a0350a3843388116bf432f1a036
+  - enabled: 1
+    path: Assets/Scenes/RocketScene.unity
+    guid: 7504d2ca52b5e4b5da1eecb4ec624df6
   m_configObjects: {}

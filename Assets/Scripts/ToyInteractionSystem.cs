@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class ToyInteractionSystem : MonoBehaviour
 {
@@ -142,6 +143,13 @@ public class ToyInteractionSystem : MonoBehaviour
         
         isInteracting = true;
         isTransitioning = false;
+        
+        // Check if this is RocketToy and transition to RocketScene
+        if (currentToy.gameObject.name == "RocketToy")
+        {
+            yield return new WaitForSeconds(0.5f); // Kısa bir bekleme
+            StartCoroutine(SceneTransitionManager.Instance.TransitionToScene("RocketScene"));
+        }
     }
     
     private void ShowInteractionUI(bool show, string text = "")

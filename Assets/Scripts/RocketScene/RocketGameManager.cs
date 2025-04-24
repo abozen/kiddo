@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -105,7 +106,7 @@ public class GameManager : MonoBehaviour
         // Show game over panel
         if (gameOverPanel != null)
         {
-            gameOverPanel.SetActive(true);
+            //gameOverPanel.SetActive(true);
             
             // Update final gems display
             if (finalGemsText != null)
@@ -127,6 +128,9 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.Save();
         
         UpdateHighScoreUI();
+        
+        // Start scene transition with cloud animation
+        StartCoroutine(SceneTransitionManager.Instance.TransitionToScene("ParkScene"));
     }
     
     public void RestartGame()
