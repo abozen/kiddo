@@ -310,8 +310,9 @@ MonoBehaviour:
   maxFireRate: 2
   initialVelocity: 1.5
   maxAngle: 45
-  accuracyRadius: 0
+  accuracyRadius: 10
   cannonAngleEffector: 0.1
+  maxDistanceToPlayer: 600
 --- !u!54 &5662122490603605443
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -36,7 +36,7 @@ public class EnemyCannonBall : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -47,6 +47,7 @@ public class EnemyCannonBall : MonoBehaviour
                 playerShip.TakeDamage();
             }
             SpawnHitEffect();
+            Debug.Log("hit");
             Destroy(gameObject);
         }
         else if (collision.gameObject.CompareTag("Water"))

@@ -14,6 +14,7 @@ public class EnemyShip : MonoBehaviour
     [SerializeField] private float cannonAngleEffector = 0.1f;
 
     [Header("References")]
+    [SerializeField] private float maxDistanceToPlayer;
     private Transform playerShip;
     private bool canFire = true;
 
@@ -61,6 +62,8 @@ public class EnemyShip : MonoBehaviour
         Vector3 directionToTarget = (targetPosition - selectedCannon.position).normalized;
         float distanceToTarget = Vector3.Distance(targetPosition, transform.position);
 
+        HandleDistanceDestroy(distanceToTarget);    //if distance is too much destroy ship
+
         // Calculate launch angle (random between 30 and maxAngle degrees)
         float launchAngle = 35f;// Random.Range(30f, maxAngle);
         Vector3 launchDirection = Quaternion.Euler(-launchAngle, 0, 0) * directionToTarget;
@@ -78,6 +81,14 @@ public class EnemyShip : MonoBehaviour
             rb.angularVelocity = Random.insideUnitSphere * 2f;
         }
     }
+
+    void HandleDistanceDestroy(float distance)
+    {
+        if(distance > maxDistanceToPlayer)
+        {
+            Destroy(gameObject);
+        }
+    }
     float CalculateInitialVelocity(float distance)
     {
         float angleInDegrees = 35f;
@@ -85,7 +96,7 @@ public class EnemyShip : MonoBehaviour
         float angleInRadians = angleInDegrees * Mathf.Deg2Rad;
 
         float velocity = Mathf.Sqrt((distance * gravity) / Mathf.Sin(2 * angleInRadians));
-        Debug.Log("velocity: " + velocity);
+
         return velocity;
     }
 
