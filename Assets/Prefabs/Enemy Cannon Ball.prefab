@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4114189535603761206}
   - component: {fileID: 6454742397035987269}
   - component: {fileID: 1608534448368578658}
+  - component: {fileID: 3453823450774716273}
   m_Layer: 0
   m_Name: Enemy Cannon Ball
   m_TagString: Untagged
@@ -150,3 +151,24 @@ MonoBehaviour:
   airResistance: 0.1
   hitEffect: {fileID: 0}
   waterSplashEffect: {fileID: 0}
+--- !u!135 &3453823450774716273
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5696825195077022095}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

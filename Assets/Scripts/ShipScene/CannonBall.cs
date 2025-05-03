@@ -10,7 +10,7 @@ public class CannonBall : MonoBehaviour
 
     [Header("Physical Properties")]
     [SerializeField] private float mass = 8f;
-    [SerializeField] private float drag = 0.1f;
+    [SerializeField] private float drag = 0f;
     [SerializeField] private PhysicMaterial physicsMaterial;
     [SerializeField] private float lifetime = 5f;
 

@@ -56,8 +56,8 @@ MonoBehaviour:
   cannons:
   - {fileID: 5967552956738024963}
   cannonBallPrefab: {fileID: 5696825195077022095, guid: 9f88acae7388544aba9806788b79cf31, type: 3}
-  minFireRate: 1
-  maxFireRate: 2
+  minFireRate: 5
+  maxFireRate: 10
   initialVelocity: 1.5
   maxAngle: 45
   accuracyRadius: 10

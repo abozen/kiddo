@@ -26,8 +26,6 @@ public class ShipStateManager : MonoBehaviour
     [SerializeField] private float firingCooldown = 2f;
     [SerializeField] private float minAimDistance = 5f;
     [SerializeField] private float maxAimDistance = 50f;
-    [SerializeField] private float minVerticalAngle = -30f;
-    [SerializeField] private float maxVerticalAngle = 30f;
     [SerializeField] private float aimSensitivity = 1.0f;
 
     [Header("Camera Settings")]

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Obstacle
   - Bullet
+  - Water
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX

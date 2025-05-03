@@ -147,8 +147,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288b429bb54d74180a1823d83e10a060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifetime: 5
-  hitEffect: {fileID: 0}
+  impactEffectPrefab: {fileID: 0}
+  trailEffectPrefab: {fileID: 0}
+  minImpactForce: 5
+  mass: 8
+  drag: 0
+  physicsMaterial: {fileID: 0}
+  lifetime: 10
 --- !u!135 &5901262870175571754
 SphereCollider:
   m_ObjectHideFlags: 0

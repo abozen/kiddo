@@ -11,32 +11,32 @@ public class TrajectoryPoint : MonoBehaviour
     private MeshRenderer meshRenderer;
     private float lifeTime = 0f;
     
-    private void Awake()
-    {
-        meshRenderer = GetComponent<MeshRenderer>();
-        if (meshRenderer == null)
-        {
-            meshRenderer = GetComponentInChildren<MeshRenderer>();
-        }
+    // private void Awake()
+    // {
+    //     meshRenderer = GetComponent<MeshRenderer>();
+    //     if (meshRenderer == null)
+    //     {
+    //         meshRenderer = GetComponentInChildren<MeshRenderer>();
+    //     }
         
-        initialScale = transform.localScale.x;
-    }
+    //     initialScale = transform.localScale.x;
+    // }
     
     private void Update()
     {
-        // Subtle pulsing effect
-        float pulse = Mathf.Sin(lifeTime * pulseSpeed) * pulseAmount;
-        float currentScale = initialScale + pulse;
-        transform.localScale = new Vector3(currentScale, currentScale, currentScale);
+        // // Subtle pulsing effect
+        // float pulse = Mathf.Sin(lifeTime * pulseSpeed) * pulseAmount;
+        // float currentScale = initialScale + pulse;
+        // transform.localScale = new Vector3(currentScale, currentScale, currentScale);
         
-        // Fade out if we have a renderer
-        if (meshRenderer != null)
-        {
-            Color currentColor = meshRenderer.material.color;
-            currentColor.a = Mathf.Lerp(currentColor.a, 0.6f, Time.deltaTime * fadeSpeed);
-            meshRenderer.material.color = currentColor;
-        }
+        // // Fade out if we have a renderer
+        // if (meshRenderer != null)
+        // {
+        //     Color currentColor = meshRenderer.material.color;
+        //     currentColor.a = Mathf.Lerp(currentColor.a, 0.6f, Time.deltaTime * fadeSpeed);
+        //     meshRenderer.material.color = currentColor;
+        // }
         
-        lifeTime += Time.deltaTime;
+        // lifeTime += Time.deltaTime;
     }
 }
