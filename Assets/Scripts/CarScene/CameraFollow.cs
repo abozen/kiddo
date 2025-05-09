@@ -3,115 +3,94 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     [Header("Target Settings")]
-    [SerializeField] private Transform target; // Player car transform
-    [SerializeField] private Vector3 offset = new Vector3(0f, 5f, -7f); // Camera offset from the player
+    public Transform target;        // Target to follow (car)
+    public Vector3 offset = new Vector3(0, 2, -5); // Default offset between camera and car
+    public float smoothSpeed = 5f; // Smoothness speed for following target
     
-    [Header("Follow Settings")]
-    [SerializeField] private float smoothSpeed = 5f; // How quickly the camera follows the target
-    [SerializeField] private float horizontalFollowFactor = 0.5f; // How much the camera follows horizontal movement (0-1)
-    [SerializeField] private float lookAheadDistance = 5f; // Distance to look ahead of the player
+    [Header("Camera Effects")]
+    public float gasEffectDistance = 1.5f; // How far back camera moves when accelerating
+    public float brakeEffectDistance = 1.0f; // How far forward camera moves when braking
+    public float effectSpeed = 5f; // Speed of camera movement effects
     
-    [Header("Additional Settings")]
-    [SerializeField] private bool followTargetRotation = false; // Whether to follow the target's rotation
-    [SerializeField] private float cameraHeight = 5f; // Fixed height of the camera
-    [SerializeField] private float fieldOfView = 60f; // Camera's field of view
+    [Header("Camera Positions")]
+    public Vector3[] cameraPoses; // Different camera positions
+    private int currentCamPos = 0;
     
-    private Vector3 lastTargetPosition;
-    private Vector3 currentVelocity = Vector3.zero;
-    private Camera mainCamera;
+    private Vector3 originalOffset; // Original offset
+    private Vector3 targetOffset; // Target offset with effects applied
+    
+    [Header("References")]
+    [SerializeField] private PlayerCarController carController;
+    bool isAccelerating = false;
+    bool isDeclariting = false;
     
     private void Start()
     {
-        mainCamera = GetComponent<Camera>();
-        if (mainCamera != null)
+        // Initialize camera position
+        if (cameraPoses != null && cameraPoses.Length > 0)
         {
-            mainCamera.fieldOfView = fieldOfView;
+            offset = cameraPoses[currentCamPos];
         }
         
-        // If target not assigned, try to find the player car
-        if (target == null)
-        {
-            PlayerCarController player = FindObjectOfType<PlayerCarController>();
-            if (player != null)
-            {
-                target = player.transform;
-            }
-            else
-            {
-                Debug.LogError("Camera Follow Script: No target assigned and player not found!");
-            }
-        }
+        // Store original offset
+        originalOffset = offset;
+        targetOffset = offset;
         
-        if (target != null)
+        // Try to find car controller if not assigned
+        if (carController == null && target != null)
         {
-            lastTargetPosition = target.position;
+            carController = target.GetComponent<PlayerCarController>();
         }
     }
     
-    private void LateUpdate()
+    void LateUpdate()
     {
-        if (target == null)
-            return;
-            
-        // Calculate the desired position
-        Vector3 desiredPosition = CalculateDesiredPosition();
+        Vector3 desiredPosition = target.position + offset; // Hedef pozisyon
+        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed); // Yumuşak geçiş
+        transform.position = desiredPosition; // Kameranın pozisyonunu güncelle
+
+        transform.LookAt(target); // Kamerayı arabanın yönüne çevir
+
         
-        // Smoothly interpolate between current position and desired position
-        Vector3 smoothedPosition = Vector3.SmoothDamp(transform.position, desiredPosition, ref currentVelocity, 1f / smoothSpeed);
-        transform.position = smoothedPosition;
+        HandleCameraEffect();
+    }
+    
+    private void HandleCameraEffect()
+    {
+        bool isAccelerating = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
+        bool isBraking = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
         
-        // Handle camera rotation
-        if (followTargetRotation)
+        // When accelerating, camera moves back
+        if (isAccelerating)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, Time.deltaTime * smoothSpeed);
+            targetOffset = originalOffset - new Vector3(0, 0, gasEffectDistance);
         }
+        // When braking, camera moves forward
+        else if (isBraking)
+        {
+            targetOffset = originalOffset + new Vector3(0, 0, brakeEffectDistance);
+        }
+        // Neither gas nor brake, camera returns to original position
         else
         {
-            transform.LookAt(target.position + target.forward * lookAheadDistance);
+            targetOffset = originalOffset;
         }
         
-        // Update last target position
-        lastTargetPosition = target.position;
+        // Smoothly move offset to target position
+        offset = Vector3.Lerp(offset, targetOffset, effectSpeed * Time.deltaTime);
     }
     
-    private Vector3 CalculateDesiredPosition()
+    public void ChangeCameraPos()
     {
-        // Calculate direction and speed of target's movement
-        Vector3 targetMovement = (target.position - lastTargetPosition) / Time.deltaTime;
-        float horizontalSpeed = Mathf.Abs(targetMovement.x);
-        
-        // Calculate horizontal offset based on target's horizontal movement
-        float dynamicHorizontalOffset = -target.position.x * horizontalFollowFactor;
-        
-        // Calculate desired position
-        Vector3 desiredPosition = new Vector3(
-            target.position.x + dynamicHorizontalOffset, 
-            target.position.y + cameraHeight, 
-            target.position.z + offset.z);
-            
-        return desiredPosition;
-    }
-    
-    // Method to set a new target (useful for changing cars or respawning)
-    public void SetTarget(Transform newTarget)
-    {
-        target = newTarget;
-        if (target != null)
+        // Change to next camera position
+        currentCamPos++;
+        if (cameraPoses != null && cameraPoses.Length > 0)
         {
-            lastTargetPosition = target.position;
+            currentCamPos %= cameraPoses.Length;
+            originalOffset = cameraPoses[currentCamPos];
+            targetOffset = originalOffset;
         }
     }
+
     
-    // Method to smoothly change camera settings during gameplay
-    public void SetCameraSettings(float newHeight, float newDistance, float newFOV, float newSmoothSpeed)
-    {
-        cameraHeight = newHeight;
-        offset.z = -newDistance;
-        smoothSpeed = newSmoothSpeed;
-        
-        if (mainCamera != null)
-        {
-            mainCamera.fieldOfView = newFOV;
-        }
-    }
 } 

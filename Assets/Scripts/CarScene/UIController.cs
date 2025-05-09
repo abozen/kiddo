@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UIController : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class UIController : MonoBehaviour
     [Header("References")]
     [SerializeField] private CarGameManager gameManager;
     [SerializeField] private PlayerCarController playerController;
+    [SerializeField] private PlayerCollisioonHandler collisionHandler;
     
     private void Start()
     {
@@ -40,6 +42,11 @@ public class UIController : MonoBehaviour
             playerController = FindObjectOfType<PlayerCarController>();
         }
         
+        if (collisionHandler == null)
+        {
+            collisionHandler = FindObjectOfType<PlayerCollisioonHandler>();
+        }
+        
         // Set up button listeners
         SetupButtons();
         
@@ -48,6 +55,9 @@ public class UIController : MonoBehaviour
         
         // Show initial UI
         HandleGameStateChanged(gameManager != null ? gameManager.GetCurrentState() : CarGameManager.GameState.Start);
+        
+        // Initialize UI
+        UpdateScore(0);
     }
     
     private void Update()
@@ -56,6 +66,12 @@ public class UIController : MonoBehaviour
         if (gameManager != null && gameManager.IsGameActive() && playerController != null)
         {
             UpdateSpeedDisplay();
+        }
+        
+        if (collisionHandler != null && scoreText != null)
+        {
+            int gemsCount = collisionHandler.GetGemsCount();
+            scoreText.text = $"Gems: {gemsCount}";
         }
     }
     
@@ -88,25 +104,126 @@ public class UIController : MonoBehaviour
             mainMenuButton.onClick.AddListener(OnMainMenuButtonClicked);
         }
         
-        // Gameplay controls
+        // Setup accelerate button
         if (accelerateButton != null)
         {
-            accelerateButton.onClick.AddListener(playerController.Accelerate);
+            // Add event trigger component if it doesn't exist
+            EventTrigger accTrigger = accelerateButton.gameObject.GetComponent<EventTrigger>() ?? 
+                                      accelerateButton.gameObject.AddComponent<EventTrigger>();
+            
+            // Clear any existing triggers
+            accTrigger.triggers.Clear();
+                                      
+            // Add pointer down event
+            EventTrigger.Entry accDownEntry = new EventTrigger.Entry();
+            accDownEntry.eventID = EventTriggerType.PointerDown;
+            accDownEntry.callback.AddListener((data) => { OnAccelerateButtonDown(); });
+            accTrigger.triggers.Add(accDownEntry);
+            
+            // Add pointer up event
+            EventTrigger.Entry accUpEntry = new EventTrigger.Entry();
+            accUpEntry.eventID = EventTriggerType.PointerUp;
+            accUpEntry.callback.AddListener((data) => { OnAccelerateButtonUp(); });
+            accTrigger.triggers.Add(accUpEntry);
+            
+            // Add pointer exit event (if finger moves off button while pressing)
+            EventTrigger.Entry accExitEntry = new EventTrigger.Entry();
+            accExitEntry.eventID = EventTriggerType.PointerExit;
+            accExitEntry.callback.AddListener((data) => { OnAccelerateButtonUp(); });
+            accTrigger.triggers.Add(accExitEntry);
+            
+            // Remove any existing click listeners to avoid conflicts
+            accelerateButton.onClick.RemoveAllListeners();
         }
         
+        // Setup brake button
         if (brakeButton != null)
         {
-            brakeButton.onClick.AddListener(playerController.Brake);
+            EventTrigger brakeTrigger = brakeButton.gameObject.GetComponent<EventTrigger>() ?? 
+                                       brakeButton.gameObject.AddComponent<EventTrigger>();
+            
+            // Clear any existing triggers
+            brakeTrigger.triggers.Clear();
+                                       
+            // Add pointer down event
+            EventTrigger.Entry brakeDownEntry = new EventTrigger.Entry();
+            brakeDownEntry.eventID = EventTriggerType.PointerDown;
+            brakeDownEntry.callback.AddListener((data) => { OnBrakeButtonDown(); });
+            brakeTrigger.triggers.Add(brakeDownEntry);
+            
+            // Add pointer up event
+            EventTrigger.Entry brakeUpEntry = new EventTrigger.Entry();
+            brakeUpEntry.eventID = EventTriggerType.PointerUp;
+            brakeUpEntry.callback.AddListener((data) => { OnBrakeButtonUp(); });
+            brakeTrigger.triggers.Add(brakeUpEntry);
+            
+            // Add pointer exit event
+            EventTrigger.Entry brakeExitEntry = new EventTrigger.Entry();
+            brakeExitEntry.eventID = EventTriggerType.PointerExit;
+            brakeExitEntry.callback.AddListener((data) => { OnBrakeButtonUp(); });
+            brakeTrigger.triggers.Add(brakeExitEntry);
+            
+            brakeButton.onClick.RemoveAllListeners();
         }
         
+        // Setup left button
         if (leftButton != null)
         {
-            leftButton.onClick.AddListener(playerController.MoveLeft);
+            EventTrigger leftTrigger = leftButton.gameObject.GetComponent<EventTrigger>() ?? 
+                                      leftButton.gameObject.AddComponent<EventTrigger>();
+            
+            // Clear any existing triggers
+            leftTrigger.triggers.Clear();
+                                      
+            // Add pointer down event
+            EventTrigger.Entry leftDownEntry = new EventTrigger.Entry();
+            leftDownEntry.eventID = EventTriggerType.PointerDown;
+            leftDownEntry.callback.AddListener((data) => { OnLeftButtonDown(); });
+            leftTrigger.triggers.Add(leftDownEntry);
+            
+            // Add pointer up event
+            EventTrigger.Entry leftUpEntry = new EventTrigger.Entry();
+            leftUpEntry.eventID = EventTriggerType.PointerUp;
+            leftUpEntry.callback.AddListener((data) => { OnLeftButtonUp(); });
+            leftTrigger.triggers.Add(leftUpEntry);
+            
+            // Add pointer exit event
+            EventTrigger.Entry leftExitEntry = new EventTrigger.Entry();
+            leftExitEntry.eventID = EventTriggerType.PointerExit;
+            leftExitEntry.callback.AddListener((data) => { OnLeftButtonUp(); });
+            leftTrigger.triggers.Add(leftExitEntry);
+            
+            leftButton.onClick.RemoveAllListeners();
         }
         
+        // Setup right button
         if (rightButton != null)
         {
-            rightButton.onClick.AddListener(playerController.MoveRight);
+            EventTrigger rightTrigger = rightButton.gameObject.GetComponent<EventTrigger>() ?? 
+                                       rightButton.gameObject.AddComponent<EventTrigger>();
+            
+            // Clear any existing triggers
+            rightTrigger.triggers.Clear();
+                                       
+            // Add pointer down event
+            EventTrigger.Entry rightDownEntry = new EventTrigger.Entry();
+            rightDownEntry.eventID = EventTriggerType.PointerDown;
+            rightDownEntry.callback.AddListener((data) => { OnRightButtonDown(); });
+            rightTrigger.triggers.Add(rightDownEntry);
+            
+            // Add pointer up event
+            EventTrigger.Entry rightUpEntry = new EventTrigger.Entry();
+            rightUpEntry.eventID = EventTriggerType.PointerUp;
+            rightUpEntry.callback.AddListener((data) => { OnRightButtonUp(); });
+            rightTrigger.triggers.Add(rightUpEntry);
+            
+            // Add pointer exit event
+            EventTrigger.Entry rightExitEntry = new EventTrigger.Entry();
+            rightExitEntry.eventID = EventTriggerType.PointerExit;
+            rightExitEntry.callback.AddListener((data) => { OnRightButtonUp(); });
+            rightTrigger.triggers.Add(rightExitEntry);
+            
+            rightButton.onClick.RemoveAllListeners();
         }
     }
     
@@ -122,7 +239,7 @@ public class UIController : MonoBehaviour
     {
         if (scoreText != null)
         {
-            scoreText.text = $"Score: {score}";
+            scoreText.text = $"Gems: {score}";
         }
     }
     
@@ -175,6 +292,70 @@ public class UIController : MonoBehaviour
         {
             // Return to main menu - alternatively could reload the scene
             gameManager.ChangeGameState(CarGameManager.GameState.Start);
+        }
+    }
+    
+    private void OnAccelerateButtonDown()
+    {
+        if (playerController != null)
+        {
+            playerController.SetAccelerate(true);
+        }
+    }
+    
+    private void OnAccelerateButtonUp()
+    {
+        if (playerController != null)
+        {
+            playerController.SetAccelerate(false);
+        }
+    }
+    
+    private void OnBrakeButtonDown()
+    {
+        if (playerController != null)
+        {
+            playerController.SetBrake(true);
+        }
+    }
+    
+    private void OnBrakeButtonUp()
+    {
+        if (playerController != null)
+        {
+            playerController.SetBrake(false);
+        }
+    }
+    
+    private void OnLeftButtonDown()
+    {
+        if (playerController != null)
+        {
+            playerController.SetMoveLeft(true);
+        }
+    }
+    
+    private void OnLeftButtonUp()
+    {
+        if (playerController != null)
+        {
+            playerController.SetMoveLeft(false);
+        }
+    }
+    
+    private void OnRightButtonDown()
+    {
+        if (playerController != null)
+        {
+            playerController.SetMoveRight(true);
+        }
+    }
+    
+    private void OnRightButtonUp()
+    {
+        if (playerController != null)
+        {
+            playerController.SetMoveRight(false);
         }
     }
 } 

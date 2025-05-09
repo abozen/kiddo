@@ -8,16 +8,11 @@ public class AITrafficCar : MonoBehaviour
     [SerializeField] private float stoppingDistance = 5f;
     [SerializeField] private float despawnDistance = 30f; // Distance behind player to despawn
     
-    [Header("Lane Settings")]
-    [SerializeField] private float laneWidth = 4f;
-    [SerializeField] private float minHorizontalPosition = -8f;
-    [SerializeField] private float maxHorizontalPosition = 8f;
-    
     [Header("References")]
     [SerializeField] private Transform playerTransform;
     
-    private int currentLane = 0;
     private bool isBraking = false;
+    private bool stoppedByCollision = false;
     
     private void Start()
     {
@@ -44,7 +39,10 @@ public class AITrafficCar : MonoBehaviour
     
     private void MoveForward()
     {
-        transform.Translate(Vector3.forward * carSpeed * Time.deltaTime);
+        if (!stoppedByCollision)
+        {
+            transform.Translate(Vector3.forward * carSpeed * Time.deltaTime);
+        }
     }
     
     private void CheckDespawn()
@@ -117,35 +115,27 @@ public class AITrafficCar : MonoBehaviour
         return carSpeed;
     }
     
-    public void SetLane(int lane)
-    {
-        currentLane = lane;
-        
-        // Calculate target X position for the lane (distribute evenly across the road width)
-        float roadWidth = maxHorizontalPosition - minHorizontalPosition;
-        int totalLanes = 4; // Keep 4 lanes as specified in requirements
-        
-        // Position the car in the correct lane
-        float laneOffset = roadWidth / totalLanes;
-        float xPos = minHorizontalPosition + (lane + 0.5f) * laneOffset;
-        
-        // Apply position
-        Vector3 position = transform.position;
-        position.x = xPos;
-        transform.position = position;
-    }
-    
-    public int GetLane()
-    {
-        return currentLane;
-    }
-    
     private void OnCollisionEnter(Collision collision)
     {
-        // Optional: Add collision effects or logic
         if (collision.gameObject.CompareTag("Player"))
         {
-            // Maybe add effects here
+            // Stop the car on collision
+            stoppedByCollision = true;
+            carSpeed = 0f;
+            
+            // Stop the player car too
+            PlayerCarController playerCar = collision.gameObject.GetComponent<PlayerCarController>();
+            if (playerCar != null)
+            {
+                playerCar.StopAfterCollision();
+            }
         }
+    }
+    
+    // Method to be called externally to stop this car
+    public void StopAfterCollision()
+    {
+        stoppedByCollision = true;
+        carSpeed = 0f;
     }
 } 

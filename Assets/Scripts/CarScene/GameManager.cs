@@ -154,4 +154,25 @@ public class CarGameManager : MonoBehaviour
     {
         return Time.time - startTime;
     }
+    
+    // Add this method to handle collectable scores
+    public void AddScore(int points)
+    {
+        if (currentState == GameState.Playing)
+        {
+            score += points;
+            
+            // Update UI
+            if (uiController != null)
+            {
+                uiController.UpdateScore(Mathf.FloorToInt(score));
+            }
+        }
+    }
+    
+    public void OnPlayerCrash()
+    {
+        // Handle player crash event
+        GameOver();
+    }
 } 

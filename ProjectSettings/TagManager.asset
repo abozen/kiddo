@@ -8,6 +8,9 @@ TagManager:
   - Bullet
   - Water
   - FxTemporaire
+  - Road
+  - TrafficCar
+  - Collectable
   layers:
   - Default
   - TransparentFX
