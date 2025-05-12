@@ -13,9 +13,11 @@ public class AITrafficCar : MonoBehaviour
     
     private bool isBraking = false;
     private bool stoppedByCollision = false;
+    private CarGameManager gameManager;
     
     private void Start()
     {
+        gameManager = FindObjectOfType<CarGameManager>();
         // Find the player if not assigned
         if (playerTransform == null)
         {
@@ -50,6 +52,8 @@ public class AITrafficCar : MonoBehaviour
         // Despawn if too far behind the player
         if (transform.position.z < playerTransform.position.z - despawnDistance)
         {
+            if(gameManager != null)
+                gameManager.DecreaseCarCount(); 
             Destroy(gameObject);
         }
     }

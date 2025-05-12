@@ -13,7 +13,7 @@ public class RoadManager : MonoBehaviour
     [SerializeField] private float roadRecycleOffset = 10f; // Distance behind player to start recycling
     
     [Header("Traffic Settings")]
-    [SerializeField] private GameObject trafficCarPrefab; // Reference to the traffic car prefab
+    [SerializeField] private GameObject[] trafficCarPrefabs; // Array of traffic car prefabs
     
     [Header("Collectable Settings")]
     [SerializeField] private GameObject collectablePrefab; // Reference to the collectable prefab
@@ -39,7 +39,7 @@ public class RoadManager : MonoBehaviour
         // Set initial spawn position based on player position plus offset
         if (playerTransform != null)
         {
-            spawnZ = playerTransform.position.z - roadTileLength; // Start one tile behind player
+            spawnZ = playerTransform.position.z + roadTileLength; // Start one tile behind player
         }
         
         // Create initial road tiles
@@ -110,7 +110,7 @@ public class RoadManager : MonoBehaviour
         if (trafficController == null)
         {
             trafficController = roadTile.AddComponent<RoadTrafficController>();
-            trafficController.trafficCarPrefab = this.trafficCarPrefab;
+            trafficController.trafficCarPrefabs = this.trafficCarPrefabs;
             trafficController.carAreasParent = roadTile.transform.Find("CarAreas");
         }
         
@@ -146,15 +146,15 @@ public class RoadManager : MonoBehaviour
             collectableSpawner.SpawnCollectables();
         }
         
-        // Set the traffic car prefab reference (using SerializedField)
-        if (trafficCarPrefab != null)
+        // Set the traffic car prefabs reference
+        if (trafficCarPrefabs != null && trafficCarPrefabs.Length > 0)
         {
             // We need to use reflection or a public property to set this
-            System.Reflection.FieldInfo field = typeof(RoadTrafficController).GetField("trafficCarPrefab", 
+            System.Reflection.FieldInfo field = typeof(RoadTrafficController).GetField("trafficCarPrefabs", 
                 System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             if (field != null)
             {
-                field.SetValue(trafficController, trafficCarPrefab);
+                field.SetValue(trafficController, trafficCarPrefabs);
             }
         }
         

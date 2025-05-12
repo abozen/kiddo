@@ -210,9 +210,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnProbability: 0.3
-  minTrafficSpeed: 5
-  maxTrafficSpeed: 15
-  trafficCarPrefab: {fileID: 5008291781405042144, guid: 42fb3c2e3b9a6404fb23597bc8a9f06c, type: 3}
+  minTrafficSpeed: 10
+  maxTrafficSpeed: 25
+  trafficCarPrefabs:
+  - {fileID: 164098, guid: 74ec27adecf7547c1a5c56d10807e420, type: 3}
+  - {fileID: 157676, guid: 5448fe3587b5242ffb3fb7a9f9ced643, type: 3}
+  - {fileID: 189930, guid: 1147ba1be9f914698ab140bd86f51c5d, type: 3}
+  - {fileID: 198730, guid: 52126cd50b37d40768cc4ac49b2707d0, type: 3}
+  - {fileID: 175378, guid: 5ddfbab48a6fd492a8369bf2bbbb1192, type: 3}
+  - {fileID: 130278, guid: 1b5b8416558e84511b98ed4668ed858b, type: 3}
+  - {fileID: 5008291781405042144, guid: 42fb3c2e3b9a6404fb23597bc8a9f06c, type: 3}
   carAreasParent: {fileID: 8230780360649747489}
 --- !u!1 &1098746476988653496
 GameObject:

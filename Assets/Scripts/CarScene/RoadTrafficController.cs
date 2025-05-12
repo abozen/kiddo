@@ -9,7 +9,7 @@ public class RoadTrafficController : MonoBehaviour
     [SerializeField] private float maxTrafficSpeed = 15f;
     
     [Header("References")]
-    [SerializeField] public GameObject trafficCarPrefab;
+    [SerializeField] public GameObject[] trafficCarPrefabs; // Array of traffic car prefabs
     [SerializeField] public Transform carAreasParent; // The parent object containing all CarAreas
 
     private CarGameManager gameManager;
@@ -20,9 +20,9 @@ public class RoadTrafficController : MonoBehaviour
     private void Start()
     {
         // Find references if not assigned
-        if (trafficCarPrefab == null)
+        if (trafficCarPrefabs == null || trafficCarPrefabs.Length == 0)
         {
-            Debug.LogError("Traffic car prefab not assigned to RoadTrafficController");
+            Debug.LogError("No traffic car prefabs assigned to RoadTrafficController");
             return;
         }
         
@@ -61,17 +61,31 @@ public class RoadTrafficController : MonoBehaviour
     {
         //if (hasSpawned || gameManager == null || !gameManager.IsGameActive() || playerTransform == null)
             //return;
-            
+
         foreach (CarSpawnArea spawnArea in spawnAreas)
         {
+            if(gameManager != null)
+            {
+                if(gameManager.GetCarCount() > gameManager.maxCarCount)
+                {
+                    return;
+                }
+            }
             // Check if we should spawn a car based on probability
             if (Random.value < spawnProbability)
             {
                 // Check if the spawn area is already occupied
                 if (!spawnArea.IsOccupied())
                 {
+                    // Randomly select a prefab from the array
+                    GameObject selectedPrefab = trafficCarPrefabs[Random.Range(0, trafficCarPrefabs.Length)];
+                    
                     // Spawn a car at this position
-                    GameObject newCar = Instantiate(trafficCarPrefab, spawnArea.transform.position, Quaternion.identity);
+                    GameObject newCar = Instantiate(selectedPrefab, spawnArea.transform.position, Quaternion.identity);
+                    if(gameManager != null)
+                    {
+                        gameManager.IncreaseCarCount();
+                    }
                     
                     // Set the AI car's speed
                     AITrafficCar aiTrafficCar = newCar.GetComponent<AITrafficCar>();

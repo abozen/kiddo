@@ -14,6 +14,8 @@ public class CarGameManager : MonoBehaviour
     [SerializeField] private float scoreMultiplier = 1f;
     [SerializeField] private float difficultyIncreaseInterval = 30f; // Seconds between difficulty increases
     [SerializeField] private float maxDifficulty = 3f;
+    public int maxCarCount = 20;
+
     
     [Header("References")]
     [SerializeField] private UIController uiController;
@@ -25,6 +27,8 @@ public class CarGameManager : MonoBehaviour
     private float gameTimer = 0f;
     private float difficultyLevel = 1f;
     private float startTime;
+    private int currentCarCount = 0;
+
     
     public static event Action<GameState> OnGameStateChanged;
     
@@ -174,5 +178,19 @@ public class CarGameManager : MonoBehaviour
     {
         // Handle player crash event
         GameOver();
+    }
+
+    public void IncreaseCarCount()
+    {
+        currentCarCount++;
+    }
+    public void  DecreaseCarCount()
+    {
+        currentCarCount = currentCarCount == 1 ? 0 : currentCarCount - 1;
+    }
+
+    public int GetCarCount()
+    {
+        return currentCarCount;
     }
 } 
